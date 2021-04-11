@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
@@ -12,12 +12,25 @@ import { ModalContext } from './context';
 import 'antd/dist/antd.css';
 import './scss/App.scss';
 
-export const elementContextValue = {
-  Component: ModalTestComponent,
-  type: 'alert',
-};
-
 export const App: React.FC = () => {
+  const contextComponent: ReactNode = ModalTestComponent;
+
+  const createContextValue = (
+    component?: ReactNode,
+    type?: string,
+    closeble?: boolean,
+    clickableBackground?: boolean
+  ) => ({
+    component,
+    type,
+    closeble,
+    clickableBackground,
+  });
+
+  const elementContextValue = useMemo(() => createContextValue(contextComponent), [
+    contextComponent,
+  ]);
+
   return (
     <Provider store={store}>
       <ModalContext.Provider value={elementContextValue}>
